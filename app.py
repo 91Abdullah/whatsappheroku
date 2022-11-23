@@ -197,7 +197,25 @@ def prereg():
         return jsonify({"success": True, "response": "sender response recieved"})
 
         # Check that email does not already exist (not a great query, but works)
+@cross_origin()
+@app.route('/getpets', methods = ['GET'])
+def getpets():
+     all_pets = []
+     pets = User.query.all()
+     for pet in pets:
+          results = {
+                    "pet_id":pet.id,
+                    "reciever_response":pet.reciever_response,
+        }
+          all_pets.append(results)
 
+     return jsonify(
+            {
+                "success": True,
+                "pets": all_pets,
+                "total_pets": len(pets),
+            }
+        )
 @cross_origin()
 @app.route('/message', methods=['POST'])
 def create_pet():
@@ -215,8 +233,7 @@ def create_pet():
     messenger.send_message(name, recipient_id="923462901820")
 
 
-    return jsonify({"success": True, "response": "Pet addedh"
-                                                 ""})
+    return jsonify({"success": True, "response": "Pet addedh" })
 @app.route('/sendimage', methods=['POST'])
 def upload_image1():
     if 'file' not in request.files:
