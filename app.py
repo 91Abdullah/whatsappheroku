@@ -172,7 +172,7 @@ def hook():
                 print("No new message")
     return "ok"
 class User(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "users1"
     id = db.Column(db.Integer, primary_key=True)
     reciever_response = db.Column(db.JSON)
 
