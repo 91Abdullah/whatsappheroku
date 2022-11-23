@@ -259,7 +259,7 @@ def create_pet():
     l=Message(message=message,number=number,sender_response=response)
     db.session.add(l)
     db.session.commit()
-    print('message data save hogaya ')
+    print('message data save hogaya mubarak ho ')
     # print(response)
     return jsonify({"success": True, "response": "Pet addedh" })
 @cross_origin()
