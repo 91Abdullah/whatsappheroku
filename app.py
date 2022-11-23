@@ -86,7 +86,7 @@ def hook():
     db.session.add(reg)
     db.session.commit()
     print('data save hogaya ')
-    return jsonify({"success": True, "response": "sender response recieved"})
+
 
     # pet = Sender(sender_response=data)
     # db.session.add(pet)
@@ -232,6 +232,7 @@ def create_pet():
     pet_data = request.json
 
     name = pet_data['name']
+    number = pet_data['number']
     print(name)
     messenger = WhatsApp(environ.get("TOKEN"),phone_number_id=environ.get("PHONE_NUMBER_ID"))  # this should be writen as
 
@@ -240,7 +241,8 @@ def create_pet():
     # response = messenger.send_audio(audio=l,recipient_id="923462901820")
     # response = messenger.send_video(video=l,recipient_id="923462901820",)
     # response = messenger.send_document(document=l, recipient_id="923462901820", )
-    messenger.send_message(name, recipient_id="923462901820")
+    response=messenger.send_message(name, recipient_id=number)
+    print(response)
 
 
     return jsonify({"success": True, "response": "Pet addedh" })
