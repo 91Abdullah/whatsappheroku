@@ -284,6 +284,8 @@ def getmessage():
         )
 @app.route('/sendimage', methods=['POST'])
 def upload_image1():
+    pet_data = request.get_json()
+    number = pet_data['number']
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
@@ -304,7 +306,11 @@ def upload_image1():
         messenger = WhatsApp(environ.get("TOKEN"), phone_number_id=environ.get("PHONE_NUMBER_ID")) #this should be writen as
 
         # For sending  images
-        response = messenger.send_image(image=l,recipient_id="923462901820",)
+        response = messenger.send_image(image=l,recipient_id=number,)
+        l = Message(message=l, number=number, sender_response=response)
+        db.session.add(l)
+        db.session.commit()
+        print('message data save hogaya mubarak ho ')
         # response = messenger.send_audio(audio=l,recipient_id="923462901820")
         # response = messenger.send_video(video=l,recipient_id="923462901820",)
         # response = messenger.send_document(document=l,recipient_id="923462901820",)
