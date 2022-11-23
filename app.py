@@ -57,6 +57,7 @@ def hook():
         return "Invalid verification token"
 
     # Handle Webhook Subscriptions
+    global data
     data = request.get_json()
     logging.info("Received webhook data: %s", data)
     # pet = Sender(sender_response=data)
@@ -187,6 +188,9 @@ class User(db.Model):
 @cross_origin()
 @app.route('/prereg', methods=['POST'])
 def prereg():
+    hook()
+    logging.info("Received webhook data: %s", data)
+    print("my save data",data)
     pet_data = request.get_json()
     if request.method == 'POST':
         reciever_response = pet_data['reciever_response']
