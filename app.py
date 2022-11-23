@@ -40,7 +40,20 @@ class User(db.Model):
 
     def __repr__(self):
         return '<reciever_response %r>' % self.reciever_response
+class Message(db.Model):
+    __tablename__ = "message"
+    id = db.Column(db.Integer, primary_key=True)
+    sender_response = db.Column(db.JSON)
+    number = db. Column(db.String(100), nullable = False)
+    message = db.Column(db.String(1000), nullable = False)
 
+    def __init__(self, sender_response,number,message):
+        self.sender_response = sender_response
+        self.number = number
+        self.message = message
+
+    def __repr__(self):
+        return '<sender_response %r>' % self.sender_response
 # @app.route('/prereg', methods=['POST'])
 # def prereg():
 #     # hook()
@@ -231,9 +244,10 @@ def getpets():
 def create_pet():
     pet_data = request.json
 
-    name = pet_data['name']
+    message = pet_data['message']
     number = pet_data['number']
-    print(name)
+
+    print()
     messenger = WhatsApp(environ.get("TOKEN"),phone_number_id=environ.get("PHONE_NUMBER_ID"))  # this should be writen as
 
     # For sending  images
@@ -241,11 +255,34 @@ def create_pet():
     # response = messenger.send_audio(audio=l,recipient_id="923462901820")
     # response = messenger.send_video(video=l,recipient_id="923462901820",)
     # response = messenger.send_document(document=l, recipient_id="923462901820", )
-    response=messenger.send_message(name, recipient_id=number)
-    print(response)
-
-
+    response=messenger.send_message(message, recipient_id=number)
+    l=Message(message=message,number=number,sender_response=response)
+    db.session.add(l)
+    db.session.commit()
+    print('message data save hogaya ')
+    # print(response)
     return jsonify({"success": True, "response": "Pet addedh" })
+@cross_origin()
+@app.route('/getmessage', methods = ['GET'])
+def getmessage():
+     all_pets = []
+     pets = Message.query.all()
+     for pet in pets:
+          results = {
+                    "pet_id":pet.id,
+                    "sender_response":pet.sender_response,
+              "message": pet.message,
+              "number": pet.number
+        }
+          all_pets.append(results)
+
+     return jsonify(
+            {
+                "success": True,
+                "pets": all_pets,
+                "total_pets": len(pets),
+            }
+        )
 @app.route('/sendimage', methods=['POST'])
 def upload_image1():
     if 'file' not in request.files:
