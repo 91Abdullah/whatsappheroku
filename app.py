@@ -302,7 +302,7 @@ def upload_image1():
         print('upload_image filename: ' + filename)
         flash('Image successfully uploaded and displayed below')
         o=url_for('static', filename='uploads/' + filename)
-        l = 'https://whatsapptestflask.herokuapp.com'+url_for('static', filename='images/' + filename)
+        l = 'https://whatsappapitest.herokuapp.com'+url_for('static', filename='images/' + filename)
         messenger = WhatsApp(environ.get("TOKEN"), phone_number_id=environ.get("PHONE_NUMBER_ID")) #this should be writen as
 
         # For sending  images
