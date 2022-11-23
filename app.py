@@ -188,8 +188,8 @@ class User(db.Model):
 @cross_origin()
 @app.route('/prereg', methods=['POST'])
 def prereg():
-    hook()
-    logging.info("Received webhook data inside function: %s", data)
+    # hook()
+    # logging.info("Received webhook data inside function: %s", data)
     # print("my save data",data)
     pet_data = request.get_json()
     if request.method == 'POST':
