@@ -242,8 +242,7 @@ def getpets():
 @cross_origin()
 @app.route('/message', methods=['POST'])
 def create_pet():
-    pet_data = request.json
-
+    pet_data = request.get_json()
     message = pet_data['message']
     number = pet_data['number']
 
