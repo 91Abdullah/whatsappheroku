@@ -193,7 +193,7 @@ def prereg():
         reg = User(reciever_response=reciever_response)
         db.session.add(reg)
         db.session.commit()
-        print('hello')
+        print('hello bhai')
         return jsonify({"success": True, "response": "sender response recieved"})
 
         # Check that email does not already exist (not a great query, but works)
