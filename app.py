@@ -60,6 +60,7 @@ def hook():
     global data
     data = request.get_json()
     logging.info("Received webhook data: %s", data)
+    print("print data",data)
     # pet = Sender(sender_response=data)
     # db.session.add(pet)
     # db.session.commit()
