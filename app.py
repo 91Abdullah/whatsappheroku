@@ -30,7 +30,30 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','wav','mpeg'
 
 app.secret_key = "super secret key"
 
+class User(db.Model):
+    __tablename__ = "users1"
+    id = db.Column(db.Integer, primary_key=True)
+    reciever_response = db.Column(db.JSON)
 
+    def __init__(self, reciever_response):
+        self.reciever_response = reciever_response
+
+    def __repr__(self):
+        return '<reciever_response %r>' % self.reciever_response
+
+# @app.route('/prereg', methods=['POST'])
+# def prereg():
+#     # hook()
+#     # logging.info("Received webhook data inside function: %s", data)
+#     # print("my save data",data)
+#     pet_data = request.get_json()
+#     if request.method == 'POST':
+#         reciever_response = pet_data['reciever_response']
+#         reg = User(reciever_response=reciever_response)
+#         db.session.add(reg)
+#         db.session.commit()
+#         print('hello bhai')
+#         return jsonify({"success": True, "response": "sender response recieved"})
 @app.route('/')
 def upload_form():
     return render_template('template.html')
@@ -44,7 +67,7 @@ VERIFY_TOKEN = 'umer' #application secret here
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
-
+@cross_origin()
 @app.route("/webhook", methods=["GET", "POST"])
 def hook():
     if request.method == "GET":
@@ -57,10 +80,14 @@ def hook():
         return "Invalid verification token"
 
     # Handle Webhook Subscriptions
-    global data
     data = request.get_json()
     logging.info("Received webhook data: %s", data)
-    print("print data",data)
+    reg = User(reciever_response=data)
+    db.session.add(reg)
+    db.session.commit()
+    print('data save hogaya ')
+    return jsonify({"success": True, "response": "sender response recieved"})
+
     # pet = Sender(sender_response=data)
     # db.session.add(pet)
     # db.session.commit()
@@ -173,33 +200,11 @@ def hook():
             else:
                 print("No new message")
     return "ok"
-class User(db.Model):
-    __tablename__ = "users1"
-    id = db.Column(db.Integer, primary_key=True)
-    reciever_response = db.Column(db.JSON)
 
-    def __init__(self, reciever_response):
-        self.reciever_response = reciever_response
-
-    def __repr__(self):
-        return '<reciever_response %r>' % self.reciever_response
 
 # Set "homepage" to index.html
 
-@cross_origin()
-@app.route('/prereg', methods=['POST'])
-def prereg():
-    # hook()
-    # logging.info("Received webhook data inside function: %s", data)
-    # print("my save data",data)
-    pet_data = request.get_json()
-    if request.method == 'POST':
-        reciever_response = pet_data['reciever_response']
-        reg = User(reciever_response=reciever_response)
-        db.session.add(reg)
-        db.session.commit()
-        print('hello bhai')
-        return jsonify({"success": True, "response": "sender response recieved"})
+
 
         # Check that email does not already exist (not a great query, but works)
 @cross_origin()
