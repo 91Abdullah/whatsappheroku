@@ -16,10 +16,13 @@ import logging
 
 from werkzeug.utils import secure_filename
 UPLOAD_FOLDER = 'static/images/'
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 from flask_cors import CORS, cross_origin
 CORS(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://japiosmuawoeif:5fb7865a30ccd9848356a018582cee7186472ddafe35b23aa61cbe6fa969a357@ec2-54-86-106-48.compute-1.amazonaws.com:5432/d4e37uperu0jod'
+db = SQLAlchemy(app)
 messenger = WhatsApp(environ.get("TOKEN"), phone_number_id=environ.get("PHONE_NUMBER_ID"))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -168,6 +171,33 @@ def hook():
             else:
                 print("No new message")
     return "ok"
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    reciever_response = db.Column(db.JSON)
+
+    def __init__(self, reciever_response):
+        self.reciever_response = reciever_response
+
+    def __repr__(self):
+        return '<reciever_response %r>' % self.reciever_response
+
+# Set "homepage" to index.html
+
+@cross_origin()
+@app.route('/prereg', methods=['POST'])
+def prereg():
+    pet_data = request.get_json()
+    if request.method == 'POST':
+        reciever_response = pet_data['reciever_response']
+        reg = User(reciever_response=reciever_response)
+        db.session.add(reg)
+        db.session.commit()
+        print('hello')
+        return jsonify({"success": True, "response": "sender response recieved"})
+
+        # Check that email does not already exist (not a great query, but works)
+
 @cross_origin()
 @app.route('/message', methods=['POST'])
 def create_pet():
