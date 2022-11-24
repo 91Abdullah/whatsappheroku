@@ -142,7 +142,7 @@ def hook():
                 reg = Userresponse(reciever_response_whole=data,message=message,type=message_type)
                 db.session.add(reg)
                 db.session.commit()
-                print('data save hogaya ')
+                print('data save hogaya mubarak ho ')
                 # logging.info("Message: %s", message,'mobile',mobile,'name',name)
                 # pet = Sender(sender_name=name, sender_number=mobile, sender_message_type=type,sender_message=message)
 
@@ -160,7 +160,7 @@ def hook():
                 reg = Userresponse(reciever_response_whole=data,message=message_text,type=message_type)
                 db.session.add(reg)
                 db.session.commit()
-                print('data save hogaya ')
+                print('data save hogaya mubarak ho')
                 # logging.info(f"Interactive Message; {message_id}: {message_text}")
 
             elif message_type == "location":
@@ -176,7 +176,7 @@ def hook():
                 reg = Userresponse(reciever_response_whole=data,message=s,type=message_type)
                 db.session.add(reg)
                 db.session.commit()
-                print('data save hogaya ')                # logging.info("Location: %s, %s", message_latitude, message_longitude)
+                print('data save hogaya mubarak ho')                # logging.info("Location: %s, %s", message_latitude, message_longitude)
 
             elif message_type == "image":
                 mobile = messenger.get_mobile(data)
@@ -192,7 +192,7 @@ def hook():
                 reg = Userresponse(reciever_response_whole=data,message=image_filename,type=message_type)
                 db.session.add(reg)
                 db.session.commit()
-                print('data save hogaya ')
+                print('data save hogaya mubarak ho')
                 # print(f"{mobile} sent image {image_filename}")
                 # logging.info('image_filename',image_filename)
 
@@ -210,7 +210,7 @@ def hook():
                 reg = Userresponse(reciever_response_whole=data,message=video_filename,type=message_type)
                 db.session.add(reg)
                 db.session.commit()
-                print('data save hogaya ')
+                print('data save hogaya mubarak ho')
 
                 # print(f"{mobile} sent video {video_filename}")
                 # logging.info('video_filename', video_filename)
@@ -228,7 +228,7 @@ def hook():
                 reg = Userresponse(reciever_response_whole=data,message=audio_filename,type=message_type)
                 db.session.add(reg)
                 db.session.commit()
-                print('data save hogaya')
+                print('data save hogaya mubarak ho')
                 # print(f" sent audio {audio_filename}")
                 # logging.info('audio_filename', audio_filename)
 
@@ -245,7 +245,7 @@ def hook():
                 reg = Userresponse(reciever_response_whole=data,message=file_filename,type=message_type)
                 db.session.add(reg)
                 db.session.commit()
-                print('data save hogaya')
+                print('data save hogaya mubarak ho')
 
 
                 # print(f"{mobile} sent file {file_filename}")
