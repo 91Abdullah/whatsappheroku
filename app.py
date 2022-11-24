@@ -40,6 +40,16 @@ class User(db.Model):
 
     def __repr__(self):
         return '<reciever_response %r>' % self.reciever_response
+class Userresponse(db.Model):
+    __tablename__ = "usersresponse"
+    id = db.Column(db.Integer, primary_key=True)
+    reciever_response_whole = db.Column(db.JSON)
+
+    def __init__(self, reciever_response):
+        self.reciever_response = reciever_response
+
+    def __repr__(self):
+        return '<reciever_response %r>' % self.reciever_response
 class Message(db.Model):
     __tablename__ = "message"
     id = db.Column(db.Integer, primary_key=True)
@@ -147,7 +157,7 @@ def hook():
                 print('message_location',message_location)
                 message_latitude = message_location["latitude"]
                 message_longitude = message_location["longitude"]
-                s='message_latitude'+str(message_latitude)+'message_longitude'+str(message_longitude)
+                s='message_latitude'+' '+str(message_latitude)+' '+'message_longitude'+' '+str(message_longitude)
                 # pet = Sender(sender_name=name, sender_number=mobile, sender_message_type=type, sender_message=message)
                 print('message_status',s,'data',data,'message_type',message_type)
                 # logging.info("Location: %s, %s", message_latitude, message_longitude)
