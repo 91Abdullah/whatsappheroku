@@ -242,7 +242,7 @@ def getpets():
 @cross_origin()
 @app.route('/message', methods=['POST'])
 def create_pet():
-    pet_data = request.get_json()
+    pet_data = request.get_json(force=True)
     message = pet_data['message']
     number = pet_data['number']
 
@@ -284,8 +284,7 @@ def getmessage():
         )
 @app.route('/sendimage', methods=['POST'])
 def upload_image1():
-    pet_data = request.get_json()
-    number = pet_data['number']
+    request_data = request.form['number']
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
@@ -307,8 +306,8 @@ def upload_image1():
         messenger = WhatsApp(environ.get("TOKEN"), phone_number_id=environ.get("PHONE_NUMBER_ID")) #this should be writen as
 
         # For sending  images
-        response = messenger.send_image(image=l,recipient_id=number,)
-        l = Message(message=l, number=number, sender_response=response)
+        response = messenger.send_image(image=l,recipient_id=request_data,)
+        l = Message(message=l, number=request_data, sender_response=response)
         db.session.add(l)
         db.session.commit()
         print('message data save hogaya mubarak ho ')
