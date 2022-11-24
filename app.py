@@ -282,6 +282,7 @@ def getmessage():
                 "total_pets": len(pets),
             }
         )
+
 @app.route('/sendimage', methods=['POST'])
 def upload_image1():
     request_data = request.form['number']
@@ -371,6 +372,7 @@ def upload_image1():
 #     return jsonify({"success": True, "response": "Pet added"})
 @app.route('/senddoc', methods=['POST'])
 def upload_image3():
+    request_data = request.form['number']
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
@@ -394,7 +396,10 @@ def upload_image3():
         # response = messenger.send_image(image=l,recipient_id="923462901820",)
         # response = messenger.send_audio(audio=l,recipient_id="923462901820")
         # response = messenger.send_video(video=l,recipient_id="923462901820",)
-        response = messenger.send_document(document=l,recipient_id="923462901820",)
+        response = messenger.send_document(document=l,recipient_id=request_data,)
+        l = Message(message=l, number=request_data, sender_response=response)
+        db.session.add(l)
+        db.session.commit()
         # For sending an Image
         # messenger.send_image(
         #         image="https://i.imgur.com/YSJayCb.jpeg",
@@ -412,6 +417,7 @@ def upload_image3():
     return jsonify({"success": True, "response": "Pet adddded"})
 @app.route('/sendaudio', methods=['POST'])
 def upload_image4():
+    request_data = request.form['number']
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
@@ -433,7 +439,10 @@ def upload_image4():
 
         # For sending  images
         # response = messenger.send_image(image=l,recipient_id="923462901820",)
-        response = messenger.send_audio(audio=l,recipient_id="923462901820")
+        response = messenger.send_audio(audio=l,recipient_id=request_data)
+        l = Message(message=l, number=request_data, sender_response=response)
+        db.session.add(l)
+        db.session.commit()
         # response = messenger.send_video(video=l,recipient_id="923462901820",)
         # response = messenger.send_document(document=l,recipient_id="923462901820",)
         # For sending an Image
@@ -453,6 +462,7 @@ def upload_image4():
     return jsonify({"success": True, "response": "Pet added"})
 @app.route('/sendvideo', methods=['POST'])
 def upload_image5():
+    request_data = request.form['number']
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
@@ -475,7 +485,10 @@ def upload_image5():
         # For sending  images
         # response = messenger.send_image(image=l,recipient_id="923462901820",)
         # response = messenger.send_audio(audio=l,recipient_id="923462901820")
-        response = messenger.send_video(video=l,recipient_id="923462901820",)
+        response = messenger.send_video(video=l,recipient_id=request_data,)
+        l = Message(message=l, number=request_data, sender_response=response)
+        db.session.add(l)
+        db.session.commit()
         # response = messenger.send_document(document=l,recipient_id="923462901820",)
         # For sending an Image
         # messenger.send_image(
