@@ -286,9 +286,7 @@ def getpets():
                 "total_pets": len(pets),
             }
         )
-    reciever_response_whole = db.Column(db.JSON)
-    message = db.Column(db.String(1000), nullable=False)
-    type = db.Column(db.String(100), nullable=False)
+
 @cross_origin()
 @app.route('/getmessagedata', methods = ['GET'])
 def getpetsgetmessagedata():
