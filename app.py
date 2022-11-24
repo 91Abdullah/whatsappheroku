@@ -44,12 +44,17 @@ class Userresponse(db.Model):
     __tablename__ = "usersresponse"
     id = db.Column(db.Integer, primary_key=True)
     reciever_response_whole = db.Column(db.JSON)
+    message = db.Column(db.String(1000), nullable=False)
+    type = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, reciever_response):
-        self.reciever_response = reciever_response
+
+    def __init__(self, reciever_response_whole,message,type):
+        self.reciever_response_whole = reciever_response_whole
+        self.message = message
+        self.type = type
 
     def __repr__(self):
-        return '<reciever_response %r>' % self.reciever_response
+        return '<reciever_response_whole %r>' % self.reciever_response_whole,
 class Message(db.Model):
     __tablename__ = "message"
     id = db.Column(db.Integer, primary_key=True)
@@ -134,6 +139,10 @@ def hook():
                 name = messenger.get_name(data)
                 message = messenger.get_message(data)
                 print('message',message,'data',data,'message_type',message_type)
+                reg = Userresponse(reciever_response_whole=data,message=message,type=message_type)
+                db.session.add(reg)
+                db.session.commit()
+                print('data save hogaya ')
                 # logging.info("Message: %s", message,'mobile',mobile,'name',name)
                 # pet = Sender(sender_name=name, sender_number=mobile, sender_message_type=type,sender_message=message)
 
@@ -148,6 +157,10 @@ def hook():
                 message_id = message_response[intractive_type]["id"]
                 message_text = message_response[intractive_type]["title"]
                 print('data',data,'message_text',message_text,'message_type',message_type)
+                reg = Userresponse(reciever_response_whole=data,message=message_text,type=message_type)
+                db.session.add(reg)
+                db.session.commit()
+                print('data save hogaya ')
                 # logging.info(f"Interactive Message; {message_id}: {message_text}")
 
             elif message_type == "location":
@@ -160,7 +173,10 @@ def hook():
                 s='message_latitude'+' '+str(message_latitude)+' '+'message_longitude'+' '+str(message_longitude)
                 # pet = Sender(sender_name=name, sender_number=mobile, sender_message_type=type, sender_message=message)
                 print('message_status',s,'data',data,'message_type',message_type)
-                # logging.info("Location: %s, %s", message_latitude, message_longitude)
+                reg = Userresponse(reciever_response_whole=data,message=s,type=message_type)
+                db.session.add(reg)
+                db.session.commit()
+                print('data save hogaya ')                # logging.info("Location: %s, %s", message_latitude, message_longitude)
 
             elif message_type == "image":
                 mobile = messenger.get_mobile(data)
@@ -173,6 +189,10 @@ def hook():
                 # logging.info(f"{mobile} image_url {image_url}")
                 image_filename = messenger.download_media(image_url, mime_type)
                 print('image_filenamge',image_filename,'data',data,'message_type',message_type)
+                reg = Userresponse(reciever_response_whole=data,message=image_filename,type=message_type)
+                db.session.add(reg)
+                db.session.commit()
+                print('data save hogaya ')
                 # print(f"{mobile} sent image {image_filename}")
                 # logging.info('image_filename',image_filename)
 
@@ -187,6 +207,11 @@ def hook():
                 # logging.info(f"{mobile} video_url {video_url}")
                 video_filename = messenger.download_media(video_url, mime_type)
                 print('video_filename', video_filename,'data',data,'message_type',message_type)
+                reg = Userresponse(reciever_response_whole=data,message=video_filename,type=message_type)
+                db.session.add(reg)
+                db.session.commit()
+                print('data save hogaya ')
+
                 # print(f"{mobile} sent video {video_filename}")
                 # logging.info('video_filename', video_filename)
 
@@ -200,6 +225,10 @@ def hook():
                 # logging.info(f"{mobile} audio_url {audio_url}")
                 audio_filename = messenger.download_media(audio_url, mime_type)
                 print('audio_filename', audio_filename,'data',data,'message_type',message_type)
+                reg = Userresponse(reciever_response_whole=data,message=audio_filename,type=message_type)
+                db.session.add(reg)
+                db.session.commit()
+                print('data save hogaya')
                 # print(f" sent audio {audio_filename}")
                 # logging.info('audio_filename', audio_filename)
 
@@ -213,6 +242,12 @@ def hook():
                 # logging.info(f"{mobile} file_url {file_url}")
                 file_filename = messenger.download_media(file_url, mime_type)
                 print('file_filename', file_filename,'data',data,'message_type',message_type)
+                reg = Userresponse(reciever_response_whole=data,message=file_filename,type=message_type)
+                db.session.add(reg)
+                db.session.commit()
+                print('data save hogaya')
+
+
                 # print(f"{mobile} sent file {file_filename}")
                 # logging.info('file_filename', file_filename)
             else:
@@ -241,6 +276,30 @@ def getpets():
           results = {
                     "pet_id":pet.id,
                     "reciever_response":pet.reciever_response,
+        }
+          all_pets.append(results)
+
+     return jsonify(
+            {
+                "success": True,
+                "pets": all_pets,
+                "total_pets": len(pets),
+            }
+        )
+    reciever_response_whole = db.Column(db.JSON)
+    message = db.Column(db.String(1000), nullable=False)
+    type = db.Column(db.String(100), nullable=False)
+@cross_origin()
+@app.route('/getmessagedata', methods = ['GET'])
+def getpetsgetmessagedata():
+     all_pets = []
+     pets = Userresponse.query.all()
+     for pet in pets:
+          results = {
+                    "pet_id":pet.id,
+                    "reciever_response_whole":pet.reciever_response_whole,
+              "message":pet.message,
+              "type":pet.type,
         }
           all_pets.append(results)
 
