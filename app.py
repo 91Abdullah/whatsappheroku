@@ -97,7 +97,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(level
 )
 
 @cross_origin()
-@app.route("/", methods=["GET", "POST"])
+@app.route("/webhook", methods=["GET", "POST"])
 def hook():
     if request.method == "GET":
         if request.args.get("hub.verify_token") == VERIFY_TOKEN:
